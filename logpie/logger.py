@@ -3,6 +3,7 @@ from enum import Enum
 import json
 import os
 import sys
+from logpie.context import request_id
 
 class LogLevel(str, Enum):
   INFO = "INFO"
@@ -27,6 +28,7 @@ class Logger:
       return
 
     log_entry = {
+      "request_id": request_id.get(None),
       "timestamp": datetime.now(timezone.utc).isoformat(),
       "level": level,
       "message": message,
