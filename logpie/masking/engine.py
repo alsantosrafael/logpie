@@ -1,8 +1,7 @@
 import re
 from typing import Any, Dict
 from config.masking_config import load_masking_config
-
-
+from logpie import metrics
 class MaskingEngine:
   def __init__(self):
     self.config = load_masking_config()
@@ -25,15 +24,19 @@ class MaskingEngine:
           "regex": re.compile(pattern),
           "replacement": replacement
         }
+        
   def mask_text(self, text: str) -> str:
       """Apply all masking rules in one string"""
       if not isinstance(text, str):
           return text
 
       masked_text = text
-      for _, rule in self.compiled_rules.items():
+      for rule_name, rule in self.compiled_rules.items():
+        if rule["regex"].search(masked_text):
           masked_text = rule["regex"].sub(rule["replacement"], masked_text)
+          metrics.masked_total.labels(data_type=rule_name).inc()
       return masked_text
+  
   def mask_log_entry(self, log_entry: Dict[str, Any]) -> Dict[str, Any]:
       mask_entry = {}
       for name, value in log_entry.items():
@@ -48,6 +51,7 @@ class MaskingEngine:
                 else item
                 for item in value
              ]
+
           else:
               mask_entry[name] = value
       return mask_entry

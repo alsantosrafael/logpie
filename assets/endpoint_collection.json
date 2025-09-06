@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "LogPie",
+    "_postman_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+    "description": "Collection para testar os endpoints do LogPie",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Metrics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/metrics",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["metrics"]
+        }
+      }
+    },
+    {
+      "name": "Create Log - INFO",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"level\": \"INFO\",\n    \"message\": \"Usuário logou no sistema\",\n    \"context\": {\n        \"email\": \"fulano@example.com\",\n        \"cpf\": \"123.456.789-00\"\n    }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/logs",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["logs"]
+        }
+      }
+    },
+    {
+      "name": "Create Log - ERROR",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"level\": \"ERROR\",\n    \"message\": \"Erro crítico ao processar pagamento\",\n    \"context\": {\n        \"card\": \"4111-1111-1111-1111\",\n        \"user\": \"joao\"\n    }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/logs",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["logs"]
+        }
+      }
+    }
+  ]
+}
