@@ -4,6 +4,7 @@ import json
 import os
 import sys
 from logpie.context import request_id
+from logpie.masking.engine import MaskingEngine
 
 class LogLevel(str, Enum):
   INFO = "INFO"
@@ -22,6 +23,7 @@ class Logger:
         LogLevel.ERROR: 40,
         LogLevel.CRITICAL: 50,
     }
+    self.masking = MaskingEngine()
 
   def log(self, level: LogLevel, message: str, **kwargs):
     if self.level_order[level] < self.level_order[self.level]:
@@ -34,7 +36,7 @@ class Logger:
       "message": message,
       "extra": kwargs
     }
-    log_entry_json = json.dumps(log_entry) + "\n"
+    log_entry_json = json.dumps(self.masking.mask_log_entry(log_entry)) + "\n"
 
     sys.stdout.write(log_entry_json)
     self.write_file(log_entry_json)
@@ -45,7 +47,6 @@ class Logger:
   def debug(self, msg, **kwargs): self.log(LogLevel.DEBUG, msg, **kwargs)
 
   def write_file(self, log):
-    print("DEBUG >>> entrando em write_file()")
     try:
       os.makedirs("logs", exist_ok=True)
       today = datetime.now().strftime("%Y-%m-%d")
