@@ -1,8 +1,9 @@
 from prometheus_client import Counter, Histogram
 
 requests_total = Counter(
-    'logpie_requests_total',
-    'Total number of requests processed by LogPie'
+    "requests_total",
+    "Total number of requests",
+    ["method", "path"]
 )
 
 masked_total = Counter(
@@ -15,4 +16,10 @@ mask_latency = Histogram(
     'logpie_mask_latency_seconds',
     'Latency of data masking operations in seconds',
     buckets=(0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, float("inf"))
+)
+
+request_latency = Histogram(
+    "request_latency_seconds",
+    "Request latency in seconds",
+    ["method", "path"]
 )

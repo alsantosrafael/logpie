@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response
 from logpie.logger import log
 from logpie.masking.engine import MaskingEngine
-from logpie.middleware import enrich_log
+from logpie.middleware import LoggingMiddleware
 from prometheus_client import generate_latest
 import logpie.metrics as metrics
 from logpie.schemas import LogEntry
@@ -9,7 +9,7 @@ from logpie.schemas import LogEntry
 app = FastAPI(title="LogPie")
 engine = MaskingEngine()
 
-app.middleware("http")(enrich_log)
+app.add_middleware(LoggingMiddleware)
 
 @app.post("/logs")
 async def create_log(entry: LogEntry):

@@ -22,6 +22,7 @@ WORKDIR /app
 
 COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
 COPY --from=builder /app /app
+ENV PYTHONPATH=/app/src
 
 EXPOSE 8000
 CMD ["uv", "run", "uvicorn", "logpie.main:app", "--host", "0.0.0.0", "--port", "8000"]
