@@ -36,7 +36,7 @@ class Logger:
       "message": message,
       "extra": kwargs
     }
-    log_entry_json = json.dumps(self.masking.mask_log_entry(log_entry)) + "\n"
+    log_entry_json = json.dumps(self.masking.mask_log_entry(log_entry), ensure_ascii=False) + "\n"
 
     sys.stdout.write(log_entry_json)
     self.write_file(log_entry_json)

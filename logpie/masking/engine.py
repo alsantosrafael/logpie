@@ -1,7 +1,7 @@
 import re
 from typing import Any, Dict
 from config.masking_config import load_masking_config
-from logpie import metrics
+import logpie.metrics as metrics
 class MaskingEngine:
   def __init__(self):
     self.config = load_masking_config()

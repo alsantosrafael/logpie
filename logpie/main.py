@@ -1,15 +1,12 @@
-import logging
 from fastapi import FastAPI, Response
 from logpie.logger import log
 from logpie.masking.engine import MaskingEngine
 from logpie.middleware import enrich_log
 from prometheus_client import generate_latest
-from logpie import metrics
+import logpie.metrics as metrics
 from logpie.schemas import LogEntry
 
 app = FastAPI(title="LogPie")
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 engine = MaskingEngine()
 
 app.middleware("http")(enrich_log)
@@ -36,7 +33,7 @@ async def create_log(entry: LogEntry):
     return {"status": "ok", "masked_context": masked_context}
 
 @app.get("/metrics")
-def metrics():
+def get_metrics():
     return Response(generate_latest(), media_type="text/plain; version=0.0.4; charset=utf-8")
 
 @app.get("/health")

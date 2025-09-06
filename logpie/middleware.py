@@ -3,7 +3,7 @@
 import time
 from fastapi import Request, Response
 from logpie.context import generate_request_id, request_id
-from logpie import metrics
+import logpie.metrics as metrics
 
 async def enrich_log(request: Request, call_next):
   start_time = time.time()
