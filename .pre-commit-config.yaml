@@ -1,0 +1,28 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0 # Use the latest stable version
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+
+  - repo: https://github.com/psf/black
+    rev: 23.12.1 # Use the same version as in your CI
+    hooks:
+      - id: black
+        args: ["--line-length=88"] # Match your flake8 max-line-length
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.1.0 # Use the same version as in your CI
+    hooks:
+      - id: flake8
+        args: ["--max-line-length=88", "--extend-ignore=E203,W503"] # Match your CI and .flake8 config
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0 # Use the same version as in your CI
+    hooks:
+      - id: mypy
+        args: ["--ignore-missing-imports"] # Match your mypy.ini config
