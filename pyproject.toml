@@ -15,10 +15,13 @@ dependencies = [
     "pyyaml>=6.0.2",
     "structlog>=25.4.0",
     "uvicorn[standard]>=0.35.0",
-    "black>=23.0.0",
+    "black==23.12.1",
     "flake8>=6.0.0",
     "mypy>=1.0.0",
     "pytest-asyncio>=0.21.0",
     "pre-commit>=3.0.0",
     "types-pyyaml",
 ]
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311']
