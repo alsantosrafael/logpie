@@ -1,6 +1,7 @@
 import re
 from logpie.config.masking_config import load_masking_config
 
+
 class MaskingEngine:
     def __init__(self):
         self.rules = load_masking_config()
@@ -24,11 +25,13 @@ class MaskingEngine:
                     masked_obj[key] = self.mask_log_entry(value)
                 elif isinstance(value, list):
                     masked_obj[key] = [
-                        self.mask_log_entry(v) 
-                        if isinstance(v, (dict, list)) 
-                        else self.mask_text(v) 
-                        if isinstance(v, str)
-                        else v
+                        (
+                            self.mask_log_entry(v)
+                            if isinstance(v, (dict, list))
+                            else self.mask_text(v)
+                            if isinstance(v, str)
+                            else v
+                        )
                         for v in value
                     ]
                 else:
@@ -36,11 +39,13 @@ class MaskingEngine:
             return masked_obj
         elif isinstance(obj, list):
             return [
-                self.mask_log_entry(v) 
-                if isinstance(v, (dict, list)) 
-                else self.mask_text(v) 
-                if isinstance(v, str) 
-                else v
+                (
+                    self.mask_log_entry(v)
+                    if isinstance(v, (dict, list))
+                    else self.mask_text(v)
+                    if isinstance(v, str)
+                    else v
+                )
                 for v in obj
             ]
         else:

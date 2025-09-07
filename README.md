@@ -11,7 +11,7 @@
 
 ## 🚀 Overview
 
-**LogPie** é uma plataforma de **logging estruturado** com foco em **compliance (LGPD/GDPR)**,  
+**LogPie** é uma plataforma de **logging estruturado** com foco em **compliance (LGPD/GDPR)**,
 **observabilidade empresarial** e **developer experience**.
 
 - ✅ Logs estruturados em JSON

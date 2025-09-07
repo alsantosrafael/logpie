@@ -1,6 +1,8 @@
 import json
 import logging
 from logpie.logger import log
+import importlib
+from logpie import logger as logmod
 
 
 def test_logger_outputs_json(caplog):
@@ -60,8 +62,6 @@ def test_logger_masks_sensitive_data(caplog):
 
 def test_logger_different_levels(caplog, monkeypatch):
     """Should log at all levels when LOG_LEVEL=DEBUG is set."""
-    import os, importlib
-    from logpie import logger as logmod
 
     monkeypatch.setenv("LOG_LEVEL", "DEBUG")
     importlib.reload(logmod)

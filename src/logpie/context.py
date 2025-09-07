@@ -1,7 +1,8 @@
 import contextvars
 import uuid
 
-request_id = contextvars.ContextVar("request_id")
+request_id: contextvars.ContextVar[str] = contextvars.ContextVar("request_id")
+
 
 def generate_request_id():
-  return uuid.uuid4().hex
+    return uuid.uuid4().hex

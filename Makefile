@@ -30,3 +30,12 @@ clean:
 ## 🐚 Abre um shell dentro do container (pra debug)
 shell:
 	docker compose -f $(COMPOSE_FILE) exec app sh
+
+lint:
+	uv run black src/ tests/
+
+lint-check:
+	uv run black . --check
+
+lint-dry:
+	uv run black . --diff --color

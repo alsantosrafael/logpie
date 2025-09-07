@@ -9,11 +9,13 @@ masking = MaskingEngine()
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 numeric_level = getattr(logging, LOG_LEVEL, logging.INFO)
 
+
 def mask_processor(logger, method_name, event_dict):
     return {
         k: masking.mask_text(v) if isinstance(v, str) else v
         for k, v in event_dict.items()
     }
+
 
 def compat_processor(logger, method_name, event_dict):
     if "event" in event_dict:
@@ -25,6 +27,7 @@ def compat_processor(logger, method_name, event_dict):
             event_dict[k] = v
         del event_dict["extra"]
     return event_dict
+
 
 def configure_logging():
     logging.basicConfig(
@@ -48,6 +51,7 @@ def configure_logging():
         logger_factory=structlog.stdlib.LoggerFactory(),
         cache_logger_on_first_use=True,
     )
+
 
 configure_logging()
 log = structlog.get_logger("logpie")

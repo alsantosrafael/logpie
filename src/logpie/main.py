@@ -11,16 +11,18 @@ from logpie.schemas import LogEntry
 app = FastAPI(title="LogPie")
 engine = MaskingEngine()
 
-metrics.service_info.info({
-    'version': os.getenv('APP_VERSION', 'dev'),
-    'environment': os.getenv('ENVIRONMENT', 'local')
-})
+metrics.service_info.info(
+    {
+        "version": os.getenv("APP_VERSION", "dev"),
+        "environment": os.getenv("ENVIRONMENT", "local"),
+    }
+)
 
 app.add_middleware(LoggingMiddleware)
 
+
 @app.post("/logs")
 async def create_log(entry: LogEntry):
-    
     with metrics.mask_latency.time():
         level = entry.level.upper()
         metrics.log_entries_total.labels(level=level).inc()
@@ -39,19 +41,23 @@ async def create_log(entry: LogEntry):
 
     return {"status": "ok"}
 
+
 @app.get("/metrics")
 def get_metrics():
-    return Response(generate_latest(), media_type="text/plain; version=0.0.4; charset=utf-8")
+    return Response(
+        generate_latest(), media_type="text/plain; version=0.0.4; charset=utf-8"
+    )
+
 
 @app.get("/health")
 async def health_check():
     rules = load_masking_config()
     active_rules_count = len(rules)
     metrics.active_rules_total.set(active_rules_count)
-    
+
     return {
         "status": "healthy",
-        "version": os.getenv('APP_VERSION', 'dev'),
+        "version": os.getenv("APP_VERSION", "dev"),
         "active_masking_rules": active_rules_count,
-        "rules": [rule['name'] for rule in rules]
+        "rules": [rule["name"] for rule in rules],
     }

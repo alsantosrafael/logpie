@@ -5,7 +5,7 @@ masking:
       pattern: '\d{4}-\d{4}-\d{4}-\d{4}'
       replacement: "[CREDIT_CARD_MASKED]"
       priority: 1
-      enabled: true  
+      enabled: true
     email:
       pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}'
       replacement: "[EMAIL_MASKED]"

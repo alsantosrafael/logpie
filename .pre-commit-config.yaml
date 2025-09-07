@@ -22,7 +22,8 @@ repos:
         args: ["--max-line-length=88", "--extend-ignore=E203,W503"] # Match your CI and .flake8 config
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0 # Use the same version as in your CI
+    rev: v1.8.0
     hooks:
       - id: mypy
-        args: ["--ignore-missing-imports"] # Match your mypy.ini config
+        additional_dependencies: ["types-PyYAML"]
+        args: ["--ignore-missing-imports"]

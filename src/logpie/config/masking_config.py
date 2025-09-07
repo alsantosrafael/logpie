@@ -1,8 +1,13 @@
 import importlib.resources
 import yaml
 
+
 def load_masking_config():
-    with importlib.resources.files("logpie.config").joinpath("masking.yaml").open("r") as f:
+    with (
+        importlib.resources.files("logpie.config")
+        .joinpath("masking.yaml")
+        .open("r") as f
+    ):
         data = yaml.safe_load(f)
 
     masking_config = data.get("masking", {})
