@@ -1,4 +1,6 @@
+import os
 from fastapi import FastAPI, Response
+from logpie.config.masking_config import load_masking_config
 from logpie.logger import log
 from logpie.masking.engine import MaskingEngine
 from logpie.middleware import LoggingMiddleware
@@ -9,28 +11,33 @@ from logpie.schemas import LogEntry
 app = FastAPI(title="LogPie")
 engine = MaskingEngine()
 
+metrics.service_info.info({
+    'version': os.getenv('APP_VERSION', 'dev'),
+    'environment': os.getenv('ENVIRONMENT', 'local')
+})
+
 app.add_middleware(LoggingMiddleware)
 
 @app.post("/logs")
 async def create_log(entry: LogEntry):
-    masked_context = engine.mask_log_entry(entry.context)
-
+    
     with metrics.mask_latency.time():
         level = entry.level.upper()
-    if level == "DEBUG":
-        log.debug(entry.message, extra=masked_context)
-    elif level == "INFO":
-        log.info(entry.message, extra=masked_context)
-    elif level == "WARNING":
-        log.warning(entry.message, extra=masked_context)
-    elif level == "ERROR":
-        log.error(entry.message, extra=masked_context)
-    elif level == "CRITICAL":
-        log.critical(entry.message, extra=masked_context)
-    else:
-        log.info(entry.message, extra=masked_context)
+        metrics.log_entries_total.labels(level=level).inc()
+        if level == "DEBUG":
+            log.debug(entry.message)
+        elif level == "INFO":
+            log.info(entry.message)
+        elif level == "WARNING":
+            log.warning(entry.message)
+        elif level == "ERROR":
+            log.error(entry.message)
+        elif level == "CRITICAL":
+            log.critical(entry.message)
+        else:
+            log.info(entry.message)
 
-    return {"status": "ok", "masked_context": masked_context}
+    return {"status": "ok"}
 
 @app.get("/metrics")
 def get_metrics():
@@ -38,4 +45,13 @@ def get_metrics():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok"}
+    rules = load_masking_config()
+    active_rules_count = len(rules)
+    metrics.active_rules_total.set(active_rules_count)
+    
+    return {
+        "status": "healthy",
+        "version": os.getenv('APP_VERSION', 'dev'),
+        "active_masking_rules": active_rules_count,
+        "rules": [rule['name'] for rule in rules]
+    }

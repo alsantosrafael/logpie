@@ -90,6 +90,35 @@ LogPie já exporta métricas nativas via `prometheus_client`.
 - [ ] Dashboard pronto no Grafana
 - [ ] OpenTelemetry traces com correlação `request_id`
 
+### 📊 PromQL
+
+#### P99 Latency
+
+```promql
+histogram_quantile(0.99, sum(rate(logpie_request_duration_seconds_bucket[5m])) by (le))
+```
+
+#### Error Rate (%)
+
+```promql
+(
+sum(rate(logpie_request_errors_total[5m])) /
+sum(rate(logpie_requests_total[5m]))
+) \* 100
+```
+
+#### Throughput (RPS)
+
+```promql
+sum(rate(logpie_requests_total[5m]))
+```
+
+#### Masking Performance
+
+```promql
+histogram_quantile(0.95, sum(rate(logpie_mask_duration_seconds_bucket[5m])) by (le))
+```
+
 ---
 
 ## ⚙️ Developer Experience
